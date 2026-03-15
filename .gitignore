@@ -1,5 +1,6 @@
 /.vs
 /SFINAE
 /x64
+/tests/Tests
 
 SFINAE*.*
