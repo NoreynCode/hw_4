@@ -1,3 +1,10 @@
+/**
+ * @file main.cpp
+ * @brief Демонстрация работы библиотеки print_ip
+ *
+ * Содержит примеры использования всех перегрузок функции print_ip.
+ */
+
 #include <iostream>
 #include <vector>
 #include <list>

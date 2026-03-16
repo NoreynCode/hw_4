@@ -1,3 +1,17 @@
+/**
+ * @file print_ip.hpp
+ * @brief Функция print_ip для печати "условного IP-адреса"
+ *
+ * Поддерживаются:
+ * - Целочисленные типы (int8_t, int16_t, int32_t, int64_t, uint8_t, uint16_t, uint32_t)
+ * - std::string
+ * - std::vector и std::list (любые типы элементов)
+ * - std::tuple (только с элементами одного типа)
+ *
+ * @author Student
+ * @version 1.0
+ */
+
 #ifndef PRINT_IP
 #define PRINT_IP
 
@@ -81,21 +95,53 @@ namespace ip_printer {
         }
     }
 
-    // Для целочисленных типов
+    /**
+     * @brief Печатает целое число как IP-адрес.
+     *
+     * Число интерпретируется как последовательность байт в порядке
+     * от старшего к младшему. Поддерживаются целые числа любого размера.
+     *
+     * @param value Целое число для печати
+     *
+     * @code
+     * print_ip(int8_t{-1});           // 255
+     * print_ip(int16_t{0});            // 0.0
+     * print_ip(int32_t{2130706433});   // 127.0.0.1
+     * print_ip(int64_t{8875824491850138409}); // 123.45.67.89.101.112.131.41
+     * @endcode
+     */
     template<typename T>
     typename std::enable_if_t<std::is_integral_v<T>>
         print_ip(T value) {
         detail::print_integer(value);
     }
 
-    // Для std::string
+    /**
+     * @brief Печатает строку без изменений.
+     *
+     * @code
+     * print_ip(std::string{"Hello, World!"}); // Hello, World!
+     * print_ip(std::string{"192.168.1.1"});   // 192.168.1.1
+     * @endcode
+     */
     template<typename T>
     typename std::enable_if_t<std::is_same_v<T, std::string>>
         print_ip(const T& value) {
         std::cout << value << std::endl;
     }
 
-    // Для std::vector и std::list
+    /**
+     * @brief Печатает элементы контейнера через точку.
+     *
+     * Поддерживаются std::vector и std::list с любым типом элементов,
+     * которые можно вывести в std::cout.
+     *
+     * @code
+     * print_ip(std::vector<int>{100, 200, 300, 400});     // 100.200.300.400
+     * print_ip(std::list<short>{400, 300, 200, 100});     // 400.300.200.100
+     * print_ip(std::vector<std::string>{"192","168","1","1"}); // 192.168.1.1
+     * @endcode
+     */
     template<typename T>
     typename std::enable_if_t<is_vector_or_list_v<T>>
         print_ip(const T& container) {
@@ -110,7 +156,20 @@ namespace ip_printer {
         std::cout << std::endl;
     }
 
-    // Для std::tuple
+    /**
+     * @brief Печатает элементы кортежа через точку.
+     *
+     * @note Все элементы кортежа должны быть одного типа.
+     *
+     * @code
+     * print_ip(std::make_tuple(123, 456, 789, 0));    // 123.456.789.0
+     * print_ip(std::make_tuple(1, 2, 3, 4, 5, 6));    // 1.2.3.4.5.6
+     * print_ip(std::make_tuple(std::string{"192"},    // 192.168.1.1
+     *                         std::string{"168"},
+     *                         std::string{"1"},
+     *                         std::string{"1"}));
+     * @endcode
+     */
     template<typename T>
     typename std::enable_if_t<is_tuple_v<T>&& all_types_same_v<T>>
         print_ip(const T& tuple) {
@@ -118,4 +177,5 @@ namespace ip_printer {
         detail::print_tuple_impl(tuple, std::make_index_sequence<tuple_size>{});
     }
 }
+
 #endif // PRINT_IP

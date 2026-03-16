@@ -1,3 +1,10 @@
+/**
+ * @file tests.cpp
+ * @brief Модульные тесты для библиотеки print_ip
+ *
+ * Тесты используют Boost.Test. Проверяются все перегрузки функции print_ip.
+ */
+
 #define BOOST_TEST_MODULE print_ip_tests
 #include <boost/test/unit_test.hpp>
 #include <boost/test/tools/output_test_stream.hpp>
