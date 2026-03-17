@@ -8,7 +8,9 @@ on:
 
 permissions:
   contents: write
-  
+  pages: write
+  id-token: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -34,6 +36,29 @@ jobs:
       - name: Check tests status
         if: steps.tests.outcome == 'failure'
         run: exit 1
+
+  docs:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      
+      - name: Install Doxygen
+        run: sudo apt-get update && sudo apt-get install doxygen -y
+      
+      - name: Generate Doxygen documentation
+        run: doxygen Doxyfile
+      
+      - name: Upload documentation artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./docs/html
+      
+      - name: Deploy to GitHub Pages
+        if: github.repository == 'NoreynCode/hw_4' && github.ref == 'refs/heads/master'
+        uses: actions/deploy-pages@v2
 
   build-and-release:
     needs: test
