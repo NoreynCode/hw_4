@@ -6,6 +6,9 @@ on:
       - master
       - feature/github_actions
 
+permissions:
+  contents: write
+  
 jobs:
   test:
     runs-on: ubuntu-latest
