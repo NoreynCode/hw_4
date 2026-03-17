@@ -39,6 +39,7 @@ jobs:
 
   docs:
     needs: test
+    if: github.repository == 'NoreynCode/hw_4'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -54,14 +55,18 @@ jobs:
       - name: Upload documentation artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          name: github-pages
           path: ./docs/html
+          retention-days: 1
       
       - name: Deploy to GitHub Pages
-        if: github.repository == 'NoreynCode/hw_4' && github.ref == 'refs/heads/master'
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages
 
   build-and-release:
     needs: test
+    if: github.repository == 'NoreynCode/hw_4'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -81,7 +86,6 @@ jobs:
         run: cmake --build . --target package
       
       - name: Create Release
-        if: github.repository == 'NoreynCode/hw_4'
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -93,7 +97,6 @@ jobs:
           prerelease: false
       
       - name: Upload Release Asset
-        if: github.repository == 'NoreynCode/hw_4'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
