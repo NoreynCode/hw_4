@@ -15,7 +15,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
       
@@ -41,7 +41,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
       
@@ -52,19 +52,19 @@ jobs:
         run: doxygen Doxyfile
       
       - name: Upload documentation artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./docs/html
       
       - name: Deploy to GitHub Pages
         if: github.repository == 'NoreynCode/hw_4' && github.ref == 'refs/heads/master'
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
 
   build-and-release:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
       
